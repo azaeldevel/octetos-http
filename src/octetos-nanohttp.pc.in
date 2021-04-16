@@ -1,0 +1,13 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+datarootdir=@datarootdir@
+datadir=@datadir@
+includedir=@prefix@/include
+
+Name: octetos-nanohttp
+Description: C++ Http Server Library
+Version: @VERSION@
+Requires: openssl sqlite3 octetos-core
+Libs: -L${libdir} -lopenssl -lsqlite3 -loctetos-core 
+Cflags: -I${includedir}
