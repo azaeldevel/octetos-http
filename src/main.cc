@@ -17,18 +17,9 @@
  * with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <sys/types.h>
-#ifndef _WIN32
-#include <sys/select.h>
-#include <sys/socket.h>
-#else
-#include <winsock2.h>
-#endif
-#include <string.h>
-#include <microhttpd.h>
-#include <stdio.h>
+#include <stdlib.h>
 
-#define PORT 8888
+#include "http.hh"
 
 static int
 answer_to_connection (void *cls, struct MHD_Connection *connection,
@@ -36,7 +27,7 @@ answer_to_connection (void *cls, struct MHD_Connection *connection,
                       const char *version, const char *upload_data,
                       size_t *upload_data_size, void **con_cls)
 {
-  const char *page = "<html><body>Hello, browser!</body></html>";
+  const char *page = "<html><body>Hello, browser librmicro 2...</body></html>";
   struct MHD_Response *response;
   int ret;
   (void)cls;               /* Unused. Silent compiler warning. */
@@ -57,18 +48,15 @@ answer_to_connection (void *cls, struct MHD_Connection *connection,
 }
 
 
-int
-main (void)
+int main (void)
 {
-  struct MHD_Daemon *daemon;
+  octetos::http::Service service;
 
-  daemon = MHD_start_daemon (MHD_USE_AUTO | MHD_USE_INTERNAL_POLLING_THREAD, PORT, NULL, NULL,
-                             &answer_to_connection, NULL, MHD_OPTION_END);
-  if (NULL == daemon)
-    return 1;
+  bool fl = service.start(MHD_USE_AUTO | MHD_USE_INTERNAL_POLLING_THREAD, PORT, NULL, NULL,&answer_to_connection, NULL);
+  if (not fl) return EXIT_FAILURE;
 
   (void) getchar ();
 
-  MHD_stop_daemon (daemon);
-  return 0;
+  service.stop();
+  return EXIT_SUCCESS;
 }
