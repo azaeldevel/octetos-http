@@ -10,7 +10,7 @@ AM_CFLAGS =\
 
 lib_LTLIBRARIES = liboctetos-nanohttp.la
 
-bin_PROGRAMS = develop
+noinst_PROGRAMS = develop
 
 
 liboctetos_nanohttp_la_SOURCES = http.cc http-db.cc
