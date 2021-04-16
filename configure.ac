@@ -13,7 +13,7 @@ AC_DEFINE(DBDIR, "/var/octetos/http",["Directorio de http"])
 
 LT_INIT
 
-
+PKG_CHECK_MODULES(MICROHTTP,[libmicrohttpd])
 PKG_CHECK_MODULES(OPENSSL,[openssl])
 PKG_CHECK_MODULES(SQLITE3, [sqlite3])
 
