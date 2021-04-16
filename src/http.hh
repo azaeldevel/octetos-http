@@ -21,6 +21,18 @@
 
 namespace octetos::http
 {
+	class Response;
+
+	class Connection
+	{
+	public:
+		Connection(MHD_Connection * connection);
+		
+		int response (unsigned int status_code, Response& response);
+	private:
+		MHD_Connection* connection;
+	};
+
 
 	class Service 
 	{
@@ -32,6 +44,17 @@ namespace octetos::http
 		void stop();
 	private:
 		MHD_Daemon* service;
+	};
+
+	class Response
+	{
+	public:
+		~Response();
+		
+		bool from_buffer(size_t size, void *data, enum MHD_ResponseMemoryMode mode);
+		operator MHD_Response* ();
+	private:
+		MHD_Response* response;
 	};
 
 }
