@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-
+#include "config.h"
 #include "http.hh"
 
 
@@ -46,8 +46,21 @@ cgicc::const_form_iterator search(cgicc::const_form_iterator first, cgicc::const
 	{
 		return host;
 	}
+	const std::string& Session::getDatabaseFilename() const
+	{
+		return dbfn;
+	}
+
+	Session::Session()
+	{
+		dbfn = DBDIR;
+		dbfn += "/database";
+	}
 	Session::Session(const std::string& id)
 	{
+		dbfn = DBDIR;
+		dbfn += "/database";
+		
 		//session = id;
 		unsigned char digest[MD5_DIGEST_LENGTH];
 		char mdString[33];
@@ -64,7 +77,8 @@ cgicc::const_form_iterator search(cgicc::const_form_iterator first, cgicc::const
         //session = mdString;
         host = h;
         //
-        octetos::http::db::Conector conn("database");
+		
+        octetos::http::db::Conector conn(dbfn);
    		conn.begin();
    		
    		if(id.empty())

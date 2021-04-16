@@ -20,12 +20,17 @@ private:
 	std::string host;
 	//std::string session;
 	octetos::http::db::Session session;
+	std::string dbfn;
 	
 public:
+	//contructors
+	Session();
+	Session(const std::string& id);
+	
 	const std::string& getSessionID() const;
 	const std::string& getHost() const;
-	Session(const std::string& id);	
 	octetos::http::db::Session& getSession();
+	const std::string& getDatabaseFilename() const;
 };
 
 }

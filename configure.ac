@@ -1,5 +1,5 @@
 
-AC_INIT(nanohttp, 0.1.0-alpha)
+AC_INIT(http, 0.2.0-alpha)
 
 AC_CONFIG_HEADERS([config.h])
 
@@ -11,8 +11,7 @@ AC_PROG_CXX
 
 
 
-
-
+AC_DEFINE(DBDIR, "/var/octetos/http",["Directorio de http"])
 
 
 

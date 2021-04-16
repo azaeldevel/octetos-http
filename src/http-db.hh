@@ -44,11 +44,15 @@ namespace octetos::http::db
 		bool rollback();
     };
     
+	class Table
+	{
+
+	};
 	/**
 	*@brief Tabla principal para almacenar la informacion de sesion.
 	*
 	*/
-    class Session
+    class Session : public Table
     {
 	private:
 		static std::string TABLE_NAME;
@@ -96,7 +100,7 @@ namespace octetos::http::db
     }; 
 
 	  
-	class Variable
+	class Variable : public Table
 	{
 	private:
 		static std::string TABLE_NAME;

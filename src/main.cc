@@ -19,9 +19,13 @@
 
 #include <iostream>
 
+#include "http.hh"
+
 int main()
 {
-	std::cout << "Hello world!" << std::endl;
+	octetos::http::Session sesion;
+	
+	std::cout << "Filename = " << sesion.getDatabaseFilename() << std::endl;
 	return 0;
 }
 
