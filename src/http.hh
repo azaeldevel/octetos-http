@@ -4,7 +4,7 @@
 #include <openssl/md5.h>
 #include <iostream>
 #include <string.h>
-#include <cgicc/Cgicc.h> 
+
 
 
 #include "http-db.hh"
@@ -12,26 +12,6 @@
 namespace octetos::http
 {
 
-cgicc::const_form_iterator search(cgicc::const_form_iterator first, cgicc::const_form_iterator last, const std::string& val);
-
-class Session
-{
-private:	
-	std::string host;
-	//std::string session;
-	octetos::http::db::Session session;
-	std::string dbfn;
-	
-public:
-	//contructors
-	Session();
-	Session(const std::string& id);
-	
-	const std::string& getSessionID() const;
-	const std::string& getHost() const;
-	octetos::http::db::Session& getSession();
-	const std::string& getDatabaseFilename() const;
-};
 
 }
 

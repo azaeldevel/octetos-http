@@ -23,9 +23,7 @@
 
 int main()
 {
-	octetos::http::Session sesion;
 	
-	std::cout << "Filename = " << sesion.getDatabaseFilename() << std::endl;
 	return 0;
 }
 

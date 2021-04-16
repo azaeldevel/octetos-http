@@ -1,5 +1,5 @@
 
-AC_INIT(http, 0.2.0-alpha)
+AC_INIT(octetos-http, 0.2.0-alpha,azael.devel@gmail.com)
 
 AC_CONFIG_HEADERS([config.h])
 
@@ -17,7 +17,7 @@ AC_DEFINE(DBDIR, "/var/octetos/http",["Directorio de http"])
 
 LT_INIT
 
-PKG_CHECK_MODULES(CGICC, [cgicc])
+
 PKG_CHECK_MODULES(OPENSSL,[openssl])
 PKG_CHECK_MODULES(SQLITE3, [sqlite3])
 
