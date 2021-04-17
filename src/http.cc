@@ -55,7 +55,9 @@ namespace octetos::http
 
 
 
-	
+	Response::Response() : response(NULL)
+	{
+	}
 	Response::~Response()
 	{
 		MHD_destroy_response (response);
@@ -65,9 +67,16 @@ namespace octetos::http
 	{
 		return response;
 	}
-	bool Response::from_buffer (size_t size, void *data, enum MHD_ResponseMemoryMode mode)
+	bool Response::from(size_t size, void *data, enum MHD_ResponseMemoryMode mode)
 	{
+		if(not response) MHD_destroy_response (response);
 		response = MHD_create_response_from_buffer(size,data,mode);
+		return response ? true : false;
+	}
+	bool Response::from(const std::string& s, enum MHD_ResponseMemoryMode mode)
+	{
+		if(not response) MHD_destroy_response (response);
+		response = MHD_create_response_from_buffer(s.size(),(void*)s.c_str(),mode);
 		return response ? true : false;
 	}
 	

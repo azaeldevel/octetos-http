@@ -15,6 +15,8 @@
 #include <string.h>
 #include <microhttpd.h>
 #include <stdio.h>
+#include <string>
+
 
 #define PORT 8888
 
@@ -49,9 +51,11 @@ namespace octetos::http
 	class Response
 	{
 	public:
+		Response();
 		~Response();
 		
-		bool from_buffer(size_t size, void *data, enum MHD_ResponseMemoryMode mode);
+		bool from(size_t size, void *data, enum MHD_ResponseMemoryMode mode);
+		bool from(const std::string&, enum MHD_ResponseMemoryMode mode);
 		operator MHD_Response* ();
 	private:
 		MHD_Response* response;
