@@ -26,7 +26,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *c,
                       const char *version, const char *upload_data,
                       size_t *upload_data_size, void **con_cls)
 {
-	const char *page = "<html><body>Hello, browser librmicro 5...</body></html>";
+	const char *page = "<html><body>Hello, browser librmicro 7...</body></html>";
   	octetos::http::Response response;
   	int ret;
   	(void)cls;               /* Unused. Silent compiler warning. */
@@ -47,13 +47,13 @@ int answer_to_connection (void *cls, struct MHD_Connection *c,
 
 int main (void)
 {
-  octetos::http::Service service;
+  	octetos::http::Service service;
 
-  bool fl = service.start(MHD_USE_AUTO | MHD_USE_INTERNAL_POLLING_THREAD, PORT, NULL, NULL,&answer_to_connection, NULL);
-  if (not fl) return EXIT_FAILURE;
+  	bool fl = service.start(MHD_USE_AUTO | MHD_USE_INTERNAL_POLLING_THREAD, PORT, NULL, NULL,&answer_to_connection, NULL);
+  	if (not fl) return EXIT_FAILURE;
 
-  (void) getchar ();
+  	(void) getchar ();
 
-  service.stop();
-  return EXIT_SUCCESS;
+  	service.stop();
+  	return EXIT_SUCCESS;
 }
