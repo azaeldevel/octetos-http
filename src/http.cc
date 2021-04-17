@@ -39,7 +39,7 @@ namespace octetos::http
 	}
 	Service::~Service()
 	{
-		MHD_stop_daemon (service);
+		stop();
 	}
 	Service::Service(unsigned int flags, unsigned short port, MHD_AcceptPolicyCallback apc, void *apc_cls, MHD_AccessHandlerCallback dh, void *dh_cls) : service(NULL)
 	{
@@ -68,7 +68,11 @@ namespace octetos::http
 	}
 	void Service::stop()
 	{
-		MHD_stop_daemon (service);
+		if(not service) 
+		{
+			MHD_stop_daemon (service);
+			service = NULL;
+		}
 	}
 
 
