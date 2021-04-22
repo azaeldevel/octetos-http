@@ -55,17 +55,13 @@ answer_to_connection (void *cls, struct MHD_Connection *c,
   if (NULL != pass) MHD_free (pass);
   if (fail)
     {
-      const char *page = "<html><body>Go away.</body></html>";
-      response =
-	MHD_create_response_from_buffer (strlen (page), (void *) page,
-					 MHD_RESPMEM_PERSISTENT);
-      ret = MHD_queue_basic_auth_fail_response (connection,
-						"my realm",
-						response);
+      	const char *page = "<html><body>Go away.</body></html>";
+		response.from(strlen (page), (void *) page,MHD_RESPMEM_PERSISTENT);
+      	ret = connection.auth_fail ("my realm",response);
     }
   else
     {
-      const char *page = "<html><body>A secret.</body></html>";
+      const char *page = "<html><body>A secret 1.</body></html>";
       response.from(strlen (page), (void *) page,MHD_RESPMEM_PERSISTENT);
       ret = connection.response(MHD_HTTP_OK, response);
     }

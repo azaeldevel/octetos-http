@@ -29,7 +29,10 @@ namespace octetos::http
 	{
 		return MHD_queue_response (connection, MHD_HTTP_OK, r);
 	}
-
+	int Connection::auth_fail(const char* str, MHD_Response* r)
+	{
+		return MHD_queue_basic_auth_fail_response (connection,str,r);
+	}
 
 
 
