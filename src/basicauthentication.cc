@@ -22,7 +22,7 @@
 #include "http.hh"
 
 static int
-answer_to_connection (void *cls, struct MHD_Connection *connection,
+answer_to_connection (void *cls, struct MHD_Connection *c,
                       const char *url, const char *method,
                       const char *version, const char *upload_data,
                       size_t *upload_data_size, void **con_cls)
@@ -31,12 +31,13 @@ answer_to_connection (void *cls, struct MHD_Connection *connection,
   char *pass;
   int fail;
   int ret;
-  struct MHD_Response *response;
+  octetos::http::Response response;
   (void)cls;               /* Unused. Silent compiler warning. */
   (void)url;               /* Unused. Silent compiler warning. */
   (void)version;           /* Unused. Silent compiler warning. */
   (void)upload_data;       /* Unused. Silent compiler warning. */
   (void)upload_data_size;  /* Unused. Silent compiler warning. */
+	octetos::http::Connection connection(c);
 
   if (0 != strcmp (method, "GET"))
     return MHD_NO;
@@ -46,11 +47,10 @@ answer_to_connection (void *cls, struct MHD_Connection *connection,
       return MHD_YES;
     }
   pass = NULL;
-  user = MHD_basic_auth_get_username_password (connection,
-                                               &pass);
+  user = connection.auth_get(&pass);
   fail = ( (NULL == user) ||
 	   (0 != strcmp (user, "root")) ||
-	   (0 != strcmp (pass, "pa$$w0rd") ) );
+	   (0 != strcmp (pass, "pa$$") ) );
   if (NULL != user) MHD_free (user);
   if (NULL != pass) MHD_free (pass);
   if (fail)
@@ -66,28 +66,24 @@ answer_to_connection (void *cls, struct MHD_Connection *connection,
   else
     {
       const char *page = "<html><body>A secret.</body></html>";
-      response =
-	MHD_create_response_from_buffer (strlen (page), (void *) page,
-					 MHD_RESPMEM_PERSISTENT);
-      ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
+      response.from(strlen (page), (void *) page,MHD_RESPMEM_PERSISTENT);
+      ret = connection.response(MHD_HTTP_OK, response);
     }
-  MHD_destroy_response (response);
-  return ret;
+
+	return ret;
 }
 
 
 int
 main (void)
 {
-  struct MHD_Daemon *daemon;
+  octetos::http::Service service(MHD_USE_INTERNAL_POLLING_THREAD, PORT, NULL, NULL, NULL);
 
-  daemon = MHD_start_daemon (MHD_USE_INTERNAL_POLLING_THREAD, PORT, NULL, NULL,
-                             &answer_to_connection, NULL, MHD_OPTION_END);
-  if (NULL == daemon)
-    return 1;
+  bool fl = service.start(&answer_to_connection);
+  if (not fl) return EXIT_FAILURE;
 
   (void) getchar ();
 
-  MHD_stop_daemon (daemon);
-  return 0;
+  service.stop();
+  return EXIT_SUCCESS;
 }

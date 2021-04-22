@@ -30,7 +30,9 @@ namespace octetos::http
 	public:
 		Connection(MHD_Connection * connection);
 		
+		operator MHD_Connection*();
 		int response (unsigned int status_code, Response& response);
+		char* auth_get(char** pass);
 	private:
 		MHD_Connection* connection;
 	};
@@ -64,6 +66,7 @@ namespace octetos::http
 		bool from(size_t size, void *data, enum MHD_ResponseMemoryMode mode);
 		bool from(const std::string&, enum MHD_ResponseMemoryMode mode);
 		operator MHD_Response* ();
+		const Response& operator =(MHD_Response* response);
 	private:
 		MHD_Response* response;
 	};

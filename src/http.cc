@@ -14,10 +14,16 @@ namespace octetos::http
 	{
 		connection = c;
 	}
+	char* Connection::auth_get(char** pass)
+	{
+		return  MHD_basic_auth_get_username_password (connection, pass);
+	}
 
 
-
-
+	Connection::operator MHD_Connection*()
+	{
+		return connection;
+	}
 
 	int Connection::response(unsigned int status_code, Response& r)
 	{
@@ -54,24 +60,31 @@ namespace octetos::http
 	}
 	bool Service::start(unsigned int flags, unsigned short port, MHD_AcceptPolicyCallback apc, void *apc_cls, MHD_AccessHandlerCallback dh, void *dh_cls)
 	{
+		if(service) MHD_stop_daemon (service);
 		service = MHD_start_daemon(flags,port,apc,apc_cls,dh,dh_cls, MHD_OPTION_END);
 		return service ? true : false;
 	}
 	bool Service::start(MHD_AccessHandlerCallback dh)
 	{
+		if(service) MHD_stop_daemon (service);
 		service = MHD_start_daemon(flags,port,apc,apc_cls,dh,dh_cls, MHD_OPTION_END);
 		return service ? true : false;
 	}
 	void Service::stop()
 	{
-		MHD_stop_daemon (service);
+		if(service)
+		{
+			MHD_stop_daemon (service);
+			service = NULL;
+		}
 	}
 
 
 
 
-	Response::Response() : response(NULL)
+	Response::Response()
 	{
+		response = NULL;
 	}
 	Response::~Response()
 	{
@@ -81,6 +94,11 @@ namespace octetos::http
 	Response::operator MHD_Response* ()
 	{
 		return response;
+	}
+	const Response& Response::operator =(MHD_Response* r)
+	{
+		response = r;
+		return *this;
 	}
 	bool Response::from(size_t size, void *data, enum MHD_ResponseMemoryMode mode)
 	{

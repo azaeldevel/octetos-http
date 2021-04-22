@@ -26,7 +26,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *c,
                       const char *version, const char *upload_data,
                       size_t *upload_data_size, void **con_cls)
 {
-	const char *page = "<html><body>Hello, browser librmicro 8...</body></html>";
+	std::string page = "<html><body>Hello, browser librmicro 8...</body></html>";
   	octetos::http::Response response;
   	int ret;
   	(void)cls;               /* Unused. Silent compiler warning. */
@@ -37,7 +37,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *c,
   	(void)upload_data_size;  /* Unused. Silent compiler warning. */
   	(void)con_cls;           /* Unused. Silent compiler warning. */
 
-  	bool fl = response.from(strlen(page),(void *)page,MHD_RESPMEM_PERSISTENT);
+  	bool fl = response.from(page,MHD_RESPMEM_PERSISTENT);
 	octetos::http::Connection connection(c);
   	ret = connection.response(MHD_HTTP_OK, response);
 
