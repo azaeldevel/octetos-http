@@ -21,21 +21,18 @@
 
 #include "http.hh"
 
-int answer_to_connection (void *cls, struct MHD_Connection *c,
-                      const char *url, const char *method,
-                      const char *version, const char *upload_data,
-                      size_t *upload_data_size, void **con_cls)
+int answer_to_connection (void *cls, struct MHD_Connection *c,const char *url, const char *method,const char *version, const char *upload_data,size_t *upload_data_size, void **con_cls)
 {
-	const char *page = "<html><body>Hello, browser librmicro 7...</body></html>";
+	const char *page = "<html><body>Hello, browser librmicro 12...</body></html>";
   	octetos::http::Response response;
   	int ret;
-  	(void)cls;               /* Unused. Silent compiler warning. */
-  	(void)url;               /* Unused. Silent compiler warning. */
-  	(void)method;            /* Unused. Silent compiler warning. */
-  	(void)version;           /* Unused. Silent compiler warning. */
-  	(void)upload_data;       /* Unused. Silent compiler warning. */
-  	(void)upload_data_size;  /* Unused. Silent compiler warning. */
-  	(void)con_cls;           /* Unused. Silent compiler warning. */
+  	(void)cls;
+  	(void)url;
+  	(void)method;
+  	(void)version;
+  	(void)upload_data;
+  	(void)upload_data_size;
+  	(void)con_cls;
 
   	bool fl = response.from(strlen(page),(void *)page,MHD_RESPMEM_PERSISTENT);
 	octetos::http::Connection connection(c);
@@ -49,10 +46,10 @@ int main (void)
 {
   	octetos::http::Service service;
 
-  	bool fl = service.start(MHD_USE_AUTO | MHD_USE_INTERNAL_POLLING_THREAD, PORT, NULL, NULL,&answer_to_connection, NULL);
+  	bool fl = service.start(MHD_USE_AUTO|MHD_USE_INTERNAL_POLLING_THREAD,PORT,NULL,NULL,&answer_to_connection,NULL);
   	if (not fl) return EXIT_FAILURE;
-
-  	(void) getchar ();
+	
+  	getchar();
 
   	service.stop();
   	return EXIT_SUCCESS;

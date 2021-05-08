@@ -34,21 +34,22 @@ namespace octetos::http
 
 
 
-	Service::Service() : service(NULL)
+	Service::Service()
 	{
+		service = NULL;
 	}
-	Service::~Service()
+	Service::Service(unsigned int flags, unsigned short port, MHD_AcceptPolicyCallback apc, void *apc_cls, void *dh_cls)
 	{
-		stop();
-	}
-	Service::Service(unsigned int flags, unsigned short port, MHD_AcceptPolicyCallback apc, void *apc_cls, MHD_AccessHandlerCallback dh, void *dh_cls) : service(NULL)
-	{
+		service = NULL;
 		this->flags = flags;
 		this->port = port;
 		this->apc = apc;
 		this->apc_cls = apc_cls;
-		this->dh = dh;
 		this->dh_cls = dh_cls;		
+	}
+	Service::~Service()
+	{
+		stop();
 	}
 	Service::operator MHD_Daemon* ()
 	{
@@ -60,10 +61,10 @@ namespace octetos::http
 		service = MHD_start_daemon(flags,port,apc,apc_cls,dh,dh_cls);
 		return service ? true : false;
 	}
-	bool Service::start()
+	bool Service::start(MHD_AccessHandlerCallback dh)
 	{
 		if(service) MHD_stop_daemon (service);
-        service = MHD_start_daemon(flags,port,apc,apc_cls,dh,dh_cls);
+		service = MHD_start_daemon(flags,port,apc,apc_cls,dh,dh_cls);
 		return service ? true : false;
 	}
 	void Service::stop()
