@@ -23,7 +23,7 @@
 
 int answer_to_connection (void *cls, struct MHD_Connection *c,const char *url, const char *method,const char *version, const char *upload_data,size_t *upload_data_size, void **con_cls)
 {
-	const char *page = "<html><body>Hello, browser librmicro 12...</body></html>";
+	std::string page = "<html><body>Hello, browser librmicro 8...</body></html>";
   	octetos::http::Response response;
   	int ret;
   	(void)cls;
@@ -34,7 +34,7 @@ int answer_to_connection (void *cls, struct MHD_Connection *c,const char *url, c
   	(void)upload_data_size;
   	(void)con_cls;
 
-  	bool fl = response.from(strlen(page),(void *)page,MHD_RESPMEM_PERSISTENT);
+  	bool fl = response.from(page,MHD_RESPMEM_PERSISTENT);
 	octetos::http::Connection connection(c);
   	ret = connection.response(MHD_HTTP_OK, response);
 
@@ -44,12 +44,12 @@ int answer_to_connection (void *cls, struct MHD_Connection *c,const char *url, c
 
 int main (void)
 {
-  	octetos::http::Service service;
+  octetos::http::Service service(MHD_USE_AUTO | MHD_USE_INTERNAL_POLLING_THREAD, PORT, NULL, NULL, NULL);
 
-  	bool fl = service.start(MHD_USE_AUTO|MHD_USE_INTERNAL_POLLING_THREAD,PORT,NULL,NULL,&answer_to_connection,NULL);
-  	if (not fl) return EXIT_FAILURE;
-	
-  	getchar();
+  bool fl = service.start(&answer_to_connection);
+  if (not fl) return EXIT_FAILURE;
+
+  	(void) getchar ();
 
   	service.stop();
   	return EXIT_SUCCESS;

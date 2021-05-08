@@ -9,21 +9,29 @@
 
 namespace octetos::http
 {
-
 	Connection::Connection(MHD_Connection * c)
 	{
 		connection = c;
 	}
+	char* Connection::auth_get(char** pass)
+	{
+		return  MHD_basic_auth_get_username_password (connection, pass);
+	}
 
 
-
-
+	Connection::operator MHD_Connection*()
+	{
+		return connection;
+	}
 
 	int Connection::response(unsigned int status_code, Response& r)
 	{
-		return MHD_queue_response (connection, MHD_HTTP_OK, r);
+		return MHD_queue_response(connection, MHD_HTTP_OK, r);
 	}
-
+	int Connection::auth_fail(const char* str, MHD_Response* r)
+	{
+		return MHD_queue_basic_auth_fail_response(connection,str,r);
+	}
 
 
 
@@ -40,12 +48,12 @@ namespace octetos::http
 	}
 	Service::Service(unsigned int flags, unsigned short port, MHD_AcceptPolicyCallback apc, void *apc_cls, void *dh_cls)
 	{
-		service = NULL;
+		service = NULL;		
 		this->flags = flags;
 		this->port = port;
 		this->apc = apc;
 		this->apc_cls = apc_cls;
-		this->dh_cls = dh_cls;		
+		this->dh_cls = dh_cls;
 	}
 	Service::~Service()
 	{
@@ -55,21 +63,16 @@ namespace octetos::http
 	{
 		return service;
 	}
-	bool Service::start(unsigned int flags, unsigned short port, MHD_AcceptPolicyCallback apc, void *apc_cls, MHD_AccessHandlerCallback dh, void *dh_cls)
-	{
-		if(service) MHD_stop_daemon (service);
-		service = MHD_start_daemon(flags,port,apc,apc_cls,dh,dh_cls);
-		return service ? true : false;
-	}
+	
 	bool Service::start(MHD_AccessHandlerCallback dh)
 	{
 		if(service) MHD_stop_daemon (service);
-		service = MHD_start_daemon(flags,port,apc,apc_cls,dh,dh_cls);
+		service = MHD_start_daemon(flags,port,apc,apc_cls,dh,dh_cls, MHD_OPTION_END);
 		return service ? true : false;
 	}
 	void Service::stop()
 	{
-		if(not service) 
+		if(not service)
 		{
 			MHD_stop_daemon (service);
 			service = NULL;
@@ -79,8 +82,9 @@ namespace octetos::http
 
 
 
-	Response::Response() : response(NULL)
+	Response::Response()
 	{
+		response = NULL;
 	}
 	Response::~Response()
 	{
@@ -90,6 +94,11 @@ namespace octetos::http
 	Response::operator MHD_Response* ()
 	{
 		return response;
+	}
+	const Response& Response::operator =(MHD_Response* r)
+	{
+		response = r;
+		return *this;
 	}
 	bool Response::from(size_t size, void *data, enum MHD_ResponseMemoryMode mode)
 	{
