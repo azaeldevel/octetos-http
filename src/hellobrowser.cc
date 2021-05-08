@@ -52,8 +52,8 @@ int main (void)
   bool fl = service.start(&answer_to_connection);
   if (not fl) return EXIT_FAILURE;
 
-  (void) getchar ();
+  	(void) getchar ();
 
-  service.stop();
-  return EXIT_SUCCESS;
+  	service.stop();
+  	return EXIT_SUCCESS;
 }
