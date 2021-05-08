@@ -57,7 +57,7 @@ answer_to_connection (void *cls, struct MHD_Connection *c,
     {
       	const char *page = "<html><body>Go away.</body></html>";
 		response.from(strlen (page), (void *) page,MHD_RESPMEM_PERSISTENT);
-      	ret = connection.auth_fail ("my realm",response);
+      	ret = connection.auth_fail ("Verificacion de usuario.",response);
     }
   else
     {

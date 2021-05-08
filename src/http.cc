@@ -9,7 +9,6 @@
 
 namespace octetos::http
 {
-
 	Connection::Connection(MHD_Connection * c)
 	{
 		connection = c;
@@ -27,11 +26,11 @@ namespace octetos::http
 
 	int Connection::response(unsigned int status_code, Response& r)
 	{
-		return MHD_queue_response (connection, MHD_HTTP_OK, r);
+		return MHD_queue_response(connection, MHD_HTTP_OK, r);
 	}
 	int Connection::auth_fail(const char* str, MHD_Response* r)
 	{
-		return MHD_queue_basic_auth_fail_response (connection,str,r);
+		return MHD_queue_basic_auth_fail_response(connection,str,r);
 	}
 
 
@@ -63,7 +62,7 @@ namespace octetos::http
 	}
 	bool Service::start(unsigned int flags, unsigned short port, MHD_AcceptPolicyCallback apc, void *apc_cls, MHD_AccessHandlerCallback dh, void *dh_cls)
 	{
-		if(service) MHD_stop_daemon (service);
+		if(service) MHD_stop_daemon(service);
 		service = MHD_start_daemon(flags,port,apc,apc_cls,dh,dh_cls, MHD_OPTION_END);
 		return service ? true : false;
 	}

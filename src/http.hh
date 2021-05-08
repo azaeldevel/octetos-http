@@ -34,6 +34,7 @@ namespace octetos::http
 		int response (unsigned int status_code, Response& response);
 		char* auth_get(char** pass);
 		int auth_fail(const char* str, MHD_Response* response);
+		
 	private:
 		MHD_Connection* connection;
 	};
