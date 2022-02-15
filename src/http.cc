@@ -70,6 +70,10 @@ namespace octetos::http
 		service = MHD_start_daemon(flags,port,apc,apc_cls,dh,dh_cls, MHD_OPTION_END);
 		return service ? true : false;
 	}
+	bool Service::start(Answer& a)
+	{
+		
+	}
 	void Service::stop()
 	{
 		if(not service)
@@ -111,6 +115,22 @@ namespace octetos::http
 		if(not response) MHD_destroy_response (response);
 		response = MHD_create_response_from_buffer(s.size(),(void*)s.c_str(),mode);
 		return response ? true : false;
+	}
+	
+	
+	
+	
+	
+	Answer::Answer(void *cls, struct MHD_Connection *connection, const char *url, const char *method, const char *version, const char *upload_data,size_t *upload_data_size, void **con_cls)
+	{
+		this->cls = cls;
+		this->connection = connection;
+		this->url = url;
+		this->method = method;
+		this->version = version;
+		this->upload_data = upload_data;
+		this->upload_data_size = upload_data_size;
+		this->con_cls = con_cls;
 	}
 	
 }

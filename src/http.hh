@@ -25,6 +25,7 @@ namespace octetos::http
 {
 	class Response;
 
+
 	class Connection
 	{
 	public:
@@ -40,6 +41,23 @@ namespace octetos::http
 	};
 
 
+	class Answer
+	{
+	public:
+		Answer(void *cls, struct MHD_Connection *connection, const char *url, const char *method, const char *version, const char *upload_data,size_t *upload_data_size, void **con_cls);
+
+	private:
+		void *cls;
+		struct MHD_Connection *connection;
+		const char *url;
+		const char *method;
+		const char *version;
+		const char *upload_data;
+		size_t *upload_data_size;
+		void **con_cls;
+
+	};
+
 	class Service 
 	{
 	public:
@@ -50,7 +68,9 @@ namespace octetos::http
 		operator MHD_Daemon* ();
 		bool start(unsigned int flags, unsigned short port, MHD_AcceptPolicyCallback apc, void *apc_cls, void *dh_cls);
 		bool start(MHD_AccessHandlerCallback dh);
+		bool start(Answer&);
 		void stop();
+		
 	private:
 		MHD_Daemon* service;
 		unsigned int flags;
@@ -73,6 +93,8 @@ namespace octetos::http
 	private:
 		MHD_Response* response;
 	};
+
+
 
 }
 
