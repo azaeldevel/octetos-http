@@ -21,11 +21,15 @@
 
 #include "http.hh"
 
-int answer_to_connection (void *cls, struct MHD_Connection *c,const char *url, const char *method,const char *version, const char *upload_data,size_t *upload_data_size, void **con_cls)
+static enum MHD_Result
+answer_to_connection (void *cls, struct MHD_Connection *c,
+                      const char *url, const char *method,
+                      const char *version, const char *upload_data,
+                      size_t *upload_data_size, void **con_cls)
 {
 	const char* page = "<html><body>Hello, browser librmicro 8...</body></html>";
   	octetos::http::Response response;
-  	int ret;
+  	MHD_Result ret;
   	(void)cls;
   	(void)url;
   	(void)method;
@@ -46,7 +50,7 @@ int main (void)
 {
   octetos::http::Service service(MHD_USE_AUTO | MHD_USE_INTERNAL_POLLING_THREAD, PORT, NULL, NULL, NULL);
 
-  bool fl = service.start(&answer_to_connection);
+  bool fl = service.start(answer_to_connection);
   if (not fl) return EXIT_FAILURE;
 
   	(void) getchar ();

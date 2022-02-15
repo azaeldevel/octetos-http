@@ -24,7 +24,7 @@ namespace octetos::http
 		return connection;
 	}
 
-	int Connection::response(unsigned int status_code, Response& r)
+	MHD_Result Connection::response(unsigned int status_code, Response& r)
 	{
 		return MHD_queue_response(connection, MHD_HTTP_OK, r);
 	}

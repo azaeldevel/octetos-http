@@ -1,4 +1,4 @@
-/* -*- Mode: C; indent-tabs-mode: t; c-basic-offset: 4; tab-width: 4 -*-  */
+
 /*
  * main.cc
  * Copyright (C) 2021 Azael Reyes <azael.devel@gmail.com>
@@ -21,8 +21,8 @@
 
 #include "http.hh"
 
-static int
-answer_to_connection (void *cls, struct MHD_Connection *connection,
+static enum MHD_Result
+answer_to_connection (void *cls, struct MHD_Connection *c,
                       const char *url, const char *method,
                       const char *version, const char *upload_data,
                       size_t *upload_data_size, void **con_cls)
@@ -30,7 +30,7 @@ answer_to_connection (void *cls, struct MHD_Connection *connection,
   char *user;
   char *pass;
   int fail;
-  int ret;
+  MHD_Result ret;
   struct MHD_Response *response;
   (void)cls;               /* Unused. Silent compiler warning. */
   (void)url;               /* Unused. Silent compiler warning. */
@@ -42,11 +42,11 @@ answer_to_connection (void *cls, struct MHD_Connection *connection,
     return MHD_NO;
   if (NULL == *con_cls)
     {
-      *con_cls = connection;
+      *con_cls = c;
       return MHD_YES;
     }
   pass = NULL;
-  user = MHD_basic_auth_get_username_password (connection,
+  user = MHD_basic_auth_get_username_password (c,
                                                &pass);
   fail = ( (NULL == user) ||
 	   (0 != strcmp (user, "root")) ||
@@ -59,7 +59,7 @@ answer_to_connection (void *cls, struct MHD_Connection *connection,
       response =
 	MHD_create_response_from_buffer (strlen (page), (void *) page,
 					 MHD_RESPMEM_PERSISTENT);
-      ret = MHD_queue_basic_auth_fail_response (connection,
+      ret = MHD_queue_basic_auth_fail_response (c,
 						"my realm",
 						response);
     }
@@ -69,7 +69,7 @@ answer_to_connection (void *cls, struct MHD_Connection *connection,
       response =
 	MHD_create_response_from_buffer (strlen (page), (void *) page,
 					 MHD_RESPMEM_PERSISTENT);
-      ret = MHD_queue_response (connection, MHD_HTTP_OK, response);
+      ret = MHD_queue_response (c, MHD_HTTP_OK, response);
     }
   MHD_destroy_response (response);
   return ret;
