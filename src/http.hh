@@ -90,6 +90,7 @@ namespace octetos::http
 		bool from(const std::string&, enum MHD_ResponseMemoryMode mode);
 		operator MHD_Response* ();
 		const Response& operator =(MHD_Response* response);
+		
 	private:
 		MHD_Response* response;
 	};
