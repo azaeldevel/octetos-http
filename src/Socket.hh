@@ -41,12 +41,17 @@ public:
 	Socket();
 	~Socket();
 
+	const sockaddr_in& get_address()const;
+	const Socketfile& get_file()const;
+
 	ErroCode create(int domain, int type, int protocol = 0);
 	ErroCode connect(const char* address,unsigned int port);
 	void write(const char* string,unsigned int lengh);
-	const char* read(unsigned int lengh);
+	void read(char*& buff, int& lengh);
+	const char* read(int lengh);
 	ErroCode listen(unsigned int backlog);
-	std::shared_ptr<Socket> accept(const char* address,unsigned int port);	
+	std::shared_ptr<Socket> accept();	
+	ErroCode bind(const char* address,unsigned int port);
 	
 private:
 	Socketfile file;
