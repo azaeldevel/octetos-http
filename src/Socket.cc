@@ -1,8 +1,6 @@
 
 #include <stdlib.h>
-#include <netinet/ip.h>
 #include <arpa/inet.h>
-#include <sys/socket.h>
 #include <unistd.h>
 
 #include "Socket.hh"
@@ -11,17 +9,7 @@ namespace oct::net
 {
 
 
-
-
-
-
-
-
-
-
-
-
-Socket::Socket() : read_buffer(NULL),file(-1)
+Socket::Socket() : read_buffer(NULL),file(-1),address({0}),address_len(0)
 {
 }
 
@@ -41,7 +29,6 @@ Socket::ErroCode Socket::create(int d, int t, int p)
 }
 Socket::ErroCode Socket::connect(const char* a,unsigned int p)
 {
-	struct sockaddr_in address; 
 	address.sin_family = AF_INET;
     address.sin_addr.s_addr = inet_addr(a); 
     address.sin_port = htons(p);
@@ -65,8 +52,19 @@ const char* Socket::read(unsigned int l)
 	::read(file, read_buffer, l);
 	return read_buffer;
 }
-
-
+Socket::ErroCode Socket::listen(unsigned int b)
+{
+	if(::listen(file,b) == -1) return FAILK_ON_LISTEN;
+	
+	return NO_ERROR;
+}
+std::shared_ptr<Socket> Socket::accept(const char* a,unsigned int p)
+{
+	std::shared_ptr<Socket> new_socket = std::shared_ptr<Socket>(new Socket);
+	
+    new_socket->file = ::accept(file,(struct sockaddr*)&new_socket->address, &new_socket->address_len);
+    return new_socket;
+}
 
 Socket::Exception::Exception(ErroCode c,const char* fn, unsigned int l) : code(c),filename(fn),line(l)
 {
