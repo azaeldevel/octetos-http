@@ -10,10 +10,10 @@ AM_CFLAGS =\
 
 lib_LTLIBRARIES = liboctetos-http.la
 
-noinst_PROGRAMS = hellobrowser basicauthentication simplepost
+noinst_PROGRAMS = hellobrowser basicauthentication simplepost develop-socket-client
 
 
-liboctetos_http_la_SOURCES = http.cc http-db.cc
+liboctetos_http_la_SOURCES = http.cc http-db.cc Socket.cc
 liboctetos_http_la_LDFLAGS = 
 liboctetos_http_la_CXXFLAGS = $(CGICC_CFLAGS) $(SQLITE3_CFLAGS) $(OPENSSL_CFLAGS) $(OCTETOS_CORE_CFLAGS)  
 liboctetos_http_la_LIBADD = $(CGICC_LIBS) $(SQLITE3_LIBS) $(OPENSSL_LIBS) $(OCTETOS_CORE_LIBS)
@@ -33,6 +33,11 @@ simplepost_SOURCES = simplepost.cc
 simplepost_LDFLAGS = 
 simplepost_CXXFLAGS = $(MICROHTTP_CFLAGS) $(OCTETOS_CORE_CFLAGS)
 simplepost_LDADD = $(MICROHTTP_LIBS)$(OCTETOS_CORE_LIBS) liboctetos-http.la
+
+develop_socket_client_SOURCES = develop-socket-client.cc
+develop_socket_client_LDFLAGS = 
+develop_socket_client_CXXFLAGS = $(MICROHTTP_CFLAGS) $(OCTETOS_CORE_CFLAGS)
+develop_socket_client_LDADD = $(MICROHTTP_LIBS)$(OCTETOS_CORE_LIBS) liboctetos-http.la
 
 octetos_core_includedir = $(includedir)/octetos/http
 octetos_core_include_HEADERS = http.hh http-db.hh
