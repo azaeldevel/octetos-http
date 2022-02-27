@@ -10,6 +10,17 @@
 namespace oct::net
 {
 
+
+
+
+
+
+
+
+
+
+
+
 Socket::Socket() : read_buffer(NULL),file(-1)
 {
 }
@@ -41,7 +52,7 @@ Socket::ErroCode Socket::connect(const char* a,unsigned int p)
 }
 void Socket::write(const char* s,unsigned int l)
 {
-	//if (file == -1)
+	if (file == -1) throw Exception(HAS_NOT_BEEN_CREATE_SOCKET,__FILE__,__LINE__);
 	::write(file, s, l);
 }
 const char* Socket::read(unsigned int l)
@@ -49,10 +60,32 @@ const char* Socket::read(unsigned int l)
 	//if (file == -1)
 	if(not read_buffer) free(read_buffer);
 	read_buffer = (char*) malloc(l);
-	if(not read_buffer) return NULL;
+	if(not read_buffer) throw Exception(FAIL_ON_CREATE_BUFFER,__FILE__,__LINE__);
 	
 	::read(file, read_buffer, l);
 	return read_buffer;
+}
+
+
+
+Socket::Exception::Exception(ErroCode c,const char* fn, unsigned int l) : code(c),filename(fn),line(l)
+{
+}
+const char* Socket::Exception::what() const throw()
+{
+	switch(code)
+	{
+		case FAIL_ON_CREATE_SOCKET:
+			return "Fallo al crear el socket";
+		case FAIL_ON_CREATE_BUFFER:
+			return "Fallo al crear buffer";
+		case FAIL_ON_CONNECT_SOCKET:
+			return "Fallo al conectar socket";
+		case HAS_NOT_BEEN_CREATE_SOCKET:
+			return "No se ha creado el socket";
+		default:
+			return "Error desconocido";
+	}
 }
 
 }
