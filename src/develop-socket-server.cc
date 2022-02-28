@@ -6,7 +6,6 @@
  
 
 /* server parameters */
-#define SERVER_ADDRESS  "0.0.0.0"     /* server IP */
 #define PORT            8080 
 #define BUF_SIZE        100               /* Buffer rx, tx max size  */
 #define BACKLOG         5                 /* Max. client pending connections  */
@@ -23,7 +22,7 @@ int main(int argc, char* argv[])          /* input arguments are not used */
     /* socket creation */
     err = server.create(AF_INET, SOCK_STREAM); 
     if (err != oct::net::Socket::ErroCode::NO_ERROR)
-    { 
+    {
         std::cout << "[SERVER-error]: socket creation failed. (" << errno << ") " << strerror( errno ) << "\n";
         return -1;
     } 
@@ -33,7 +32,7 @@ int main(int argc, char* argv[])          /* input arguments are not used */
     }
     
     /* Bind socket */
-    err = server.bind(SERVER_ADDRESS,PORT);
+    err = server.bind(PORT);
     if (err != oct::net::Socket::ErroCode::NO_ERROR)
     {
         std::cout << "[SERVER-error]: socket bind failed. (" << errno << ") " << strerror( errno ) << "\n";
@@ -50,7 +49,7 @@ int main(int argc, char* argv[])          /* input arguments are not used */
     {
         std::cout << "[SERVER-error]: socket listen failed. (" << errno << ") " << strerror( errno ) << "\n";
         return -1;
-    } 
+    }
     else
     {
         std::cout << "[SERVER]: Listening on SERV_PORT. " << ntohs(server.get_address().sin_port) << "\n";
@@ -67,9 +66,9 @@ int main(int argc, char* argv[])          /* input arguments are not used */
             return -1;
         } 
         else
-        {              
+        {
             while(1) /* read data from a client socket till it is closed */ 
-            {  
+            {
                 /* read client message, copy it into buffer */
                 buff_rx = new_socket->read(100);  
                 
@@ -87,8 +86,8 @@ int main(int argc, char* argv[])          /* input arguments are not used */
                 {
                     new_socket->write(buff_tx, strlen(buff_tx));
                     printf("[SERVER]: %s \n", buff_rx);
-                }            
-            }  
-        }                      
+                }
+            }
+        }                   
     }    
 } 

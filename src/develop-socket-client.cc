@@ -1,6 +1,5 @@
 
 
-#define SERVER_ADDRESS  "0.0.0.0"     /* server IP */
 #define PORT            8080 
 char buf_tx[] = "Hello server. I am a client";
 
@@ -9,7 +8,7 @@ char buf_tx[] = "Hello server. I am a client";
 #include "Socket.hh"
  
 /* This clients connects, sends a text and disconnects */
-int main() 
+int main(int argc, char* argv[]) 
 { 
 	oct::net::Socket::ErroCode err;
     oct::net::Socket socket;
@@ -27,7 +26,7 @@ int main()
     }
     
     /* try to connect the client socket to server socket */
-    err = socket.connect(SERVER_ADDRESS,PORT);
+    err = socket.connect(argv[1],PORT);
     if (err != oct::net::Socket::ErroCode::NO_ERROR) 
     { 
         std::cout << "connection with the server failed...\n";  

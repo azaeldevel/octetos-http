@@ -44,6 +44,13 @@ int main(int argc, char* argv[])          /* input arguments are not used */
         std::cout << "[SERVER]: Socket successfully binded \n";
     }
 	
+	err = server.connect(argv[1],PORT);
+    if (err != oct::net::Socket::ErroCode::NO_ERROR) 
+    {
+        std::cout << "connection with the server failed...\n";  
+        return EXIT_FAILURE;
+    }
+	
     /* Listen */
     err = server.listen(BACKLOG);
     if (err != oct::net::Socket::ErroCode::NO_ERROR)
@@ -55,21 +62,27 @@ int main(int argc, char* argv[])          /* input arguments are not used */
     {
         std::cout << "[SERVER]: Listening on SERV_PORT. " << ntohs(server.get_address().sin_port) << "\n";
     }
-	
-	/*err = server.connect(argv[1],PORT);
-    if (err != oct::net::Socket::ErroCode::NO_ERROR) 
-    {
-        std::cout << "connection with the server failed...\n";  
-        return EXIT_FAILURE;
-    }*/
-	//server.write("[SERVER]: open.");
-    	
+	    	
     /* Accept the data from incoming sockets in a iterative way */
 	std::shared_ptr<oct::net::Socket> new_socket;
    	while(true)
    	{
         new_socket = server.accept(); 	
         buff_rx = new_socket->read(BUF_SIZE);  
+		if(strcmp("Hi",buff_rx) == 0)
+		{
+			err = server.connect(SERVER_ADDRESS,PORT);
+			if (err != oct::net::Socket::ErroCode::NO_ERROR) 
+			{ 
+				std::cout << "connection with the server failed...\n";  
+				return EXIT_FAILURE;
+			}
+		}
+		else if(strcmp("Bye",buff_rx) == 0)
+		{
+
+		}
+			   
 		std::cout << "[CLIENT] : " << buff_rx << "\n";
     }
 } 
