@@ -17,7 +17,7 @@ int main(int argc, char* argv[])          /* input arguments are not used */
     char buff_tx[BUF_SIZE] = "Hello client, I am the server";
     const char* buff_rx;   /* buffers for reception  */
 	oct::net::Socket::ErroCode err;
-    oct::net::Socket server;
+    oct::net::SocketBi server;
     
      
     /* socket creation */
@@ -56,6 +56,12 @@ int main(int argc, char* argv[])          /* input arguments are not used */
         std::cout << "[SERVER]: Listening on SERV_PORT. " << ntohs(server.get_address().sin_port) << "\n";
     }
 	
+	err = server.connect(argv[1],PORT);
+    if (err != oct::net::Socket::ErroCode::NO_ERROR) 
+    {
+        std::cout << "connection with the server failed...\n";  
+        return EXIT_FAILURE;
+    }
 	//server.write("[SERVER]: open.");
     	
     /* Accept the data from incoming sockets in a iterative way */

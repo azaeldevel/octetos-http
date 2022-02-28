@@ -36,7 +36,7 @@ const sockaddr_in& Socket::get_address()const
 {
 	return address;
 }
-const Socket::Socketfile& Socket::get_file()const
+Socket::Socketfile Socket::get_file()const
 {
 	return file;
 }
@@ -44,8 +44,7 @@ Socket::ErroCode Socket::create(int d, int t, int p)
 {
 	file = socket(d,t,p);
 	if (file == -1) return FAIL_ON_CREATE_SOCKET;
-	
-		
+			
 	return NO_ERROR;
 }
 Socket::ErroCode Socket::connect(const char* a,unsigned int p)
@@ -120,6 +119,25 @@ std::shared_ptr<Socket> Socket::accept()
 }
 
 
+
+
+SocketBi::SocketBi() : address({0})
+{
+}
+
+SocketBi::~SocketBi()
+{
+}
+Socket::ErroCode SocketBi::connect(const char* a,unsigned int p)
+{	
+	address.sin_family = AF_INET;
+    address.sin_addr.s_addr = inet_addr(a); 
+    address.sin_port = htons(p);
+    
+    if(::connect(get_file(), (struct sockaddr*)&address, sizeof(address)) == -1) return Socket::ErroCode::FAIL_ON_CONNECT_SOCKET;
+    
+    return NO_ERROR;
+}
 
 
 

@@ -42,7 +42,7 @@ public:
 	~Socket();
 
 	const sockaddr_in& get_address()const;
-	const Socketfile& get_file()const;
+	Socketfile get_file()const;
 
 	ErroCode create(int domain, int type, int protocol = 0);
 	ErroCode connect(const char* address,unsigned int port);
@@ -53,7 +53,7 @@ public:
 	ErroCode listen(unsigned int backlog);
 	std::shared_ptr<Socket> accept();	
 	ErroCode bind(const char* address,unsigned int port);
-	ErroCode bind(unsigned int port);
+	ErroCode bind(unsigned int port);//for server
 	void close();
 	
 	
@@ -64,6 +64,20 @@ private:
 	struct sockaddr_in address;
 	unsigned int address_len;
 };
+
+class SocketBi : public Socket
+{
+public:
+	SocketBi();
+	~SocketBi();
+
+	ErroCode connect(const char* to_address,unsigned int port);
+
+private:
+	struct sockaddr_in address;
+
+};
+
 }
 
 #endif
