@@ -102,8 +102,8 @@ int main(int argc, char* argv[])          /* input arguments are not used */
 				server.write((const char*)buff_tx);
     			std::cout << "CLIENT:Received: " << server.read(100) << "\n"; 
 				server.write("bye..");
-				server.close();
-				break;
+				//server.close();
+				//break;
             }  
         }                      
     }    
