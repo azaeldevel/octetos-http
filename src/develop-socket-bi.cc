@@ -32,8 +32,6 @@ int main(int argc, char* argv[])          /* input arguments are not used */
         std::cout << "[SERVER]: Socket successfully created..\n";
     }
     
-    
-    
     /* Bind socket */
     err = server.bind(SERVER_ADDRESS,PORT);
     if (err != oct::net::Socket::ErroCode::NO_ERROR)
@@ -73,7 +71,7 @@ int main(int argc, char* argv[])          /* input arguments are not used */
             while(1) /* read data from a client socket till it is closed */ 
             {  
                 /* read client message, copy it into buffer */
-                buff_rx = new_socket->read(100);  
+                buff_rx = new_socket->read(BUF_SIZE);  
                 
                 if(not buff_rx)
                 {
@@ -89,7 +87,18 @@ int main(int argc, char* argv[])          /* input arguments are not used */
                 {
                     new_socket->write(buff_tx, strlen(buff_tx));
                     printf("[SERVER]: %s \n", buff_rx);
-                }            
+                } 
+                
+				err = server.connect(SERVER_ADDRESS,PORT);
+				if (err != oct::net::Socket::ErroCode::NO_ERROR)
+				{
+					std::cout << "[SERVER-error]: socket connect failed. (" << errno << ") " << strerror( errno ) << "\n";
+					return -1;
+				} 
+				else
+				{
+					std::cout << "[SERVER]: Socket successfully connect\n";
+				}
             }  
         }                      
     }    
