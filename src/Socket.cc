@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "Socket.hh"
 
@@ -15,10 +16,22 @@ Socket::Socket() : read_buffer(NULL),file(-1),address({0}),address_len(0)
 
 Socket::~Socket()
 {
-	free(read_buffer);
-	if(file != -1)close(file);
+	close();
 }
 
+void Socket::close()
+{
+	if(read_buffer) 
+	{
+		read_buffer = NULL;
+		free(read_buffer);
+	}
+	if(file != -1) 
+	{
+		::close(file);
+		file = -1;
+	}
+}
 const sockaddr_in& Socket::get_address()const
 {
 	return address;
@@ -59,6 +72,11 @@ void Socket::write(const char* s,unsigned int l)
 {
 	if (file == -1) throw Exception(HAS_NOT_BEEN_CREATE_SOCKET,__FILE__,__LINE__);
 	::write(file, s, l);
+}
+void Socket::write(const char* s)
+{
+	if (file == -1) throw Exception(HAS_NOT_BEEN_CREATE_SOCKET,__FILE__,__LINE__);
+	::write(file, s, strlen(s));
 }
 void Socket::read(char*& b, int& l)
 {

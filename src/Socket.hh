@@ -47,11 +47,13 @@ public:
 	ErroCode create(int domain, int type, int protocol = 0);
 	ErroCode connect(const char* address,unsigned int port);
 	void write(const char* string,unsigned int lengh);
+	void write(const char* string);
 	void read(char*& buff, int& lengh);
 	const char* read(int lengh);
 	ErroCode listen(unsigned int backlog);
 	std::shared_ptr<Socket> accept();	
 	ErroCode bind(const char* address,unsigned int port);
+	void close();
 	
 private:
 	Socketfile file;
