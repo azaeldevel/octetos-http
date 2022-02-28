@@ -56,9 +56,10 @@ public:
 	ErroCode bind(unsigned int port);//for server
 	void close();
 	
-	
-private:
+protected:
 	Socketfile file;
+
+private:
 	//char* write_buffer;
 	char* read_buffer;
 	struct sockaddr_in address;

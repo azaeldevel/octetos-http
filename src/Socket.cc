@@ -134,7 +134,7 @@ Socket::ErroCode SocketBi::connect(const char* a,unsigned int p)
     address.sin_addr.s_addr = inet_addr(a); 
     address.sin_port = htons(p);
     
-    if(::connect(get_file(), (struct sockaddr*)&address, sizeof(address)) == -1) return Socket::ErroCode::FAIL_ON_CONNECT_SOCKET;
+    if(::connect(file, (sockaddr*)&address, sizeof(address)) == -1) return Socket::ErroCode::FAIL_ON_CONNECT_SOCKET;
     
     return NO_ERROR;
 }
