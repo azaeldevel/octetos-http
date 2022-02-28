@@ -53,7 +53,9 @@ public:
 	ErroCode listen(unsigned int backlog);
 	std::shared_ptr<Socket> accept();	
 	ErroCode bind(const char* address,unsigned int port);
+	ErroCode bind(unsigned int port);
 	void close();
+	
 	
 private:
 	Socketfile file;

@@ -33,7 +33,7 @@ int main(int argc, char* argv[])          /* input arguments are not used */
     }
     
     /* Bind socket */
-    err = server.bind(SERVER_ADDRESS,PORT);
+    err = server.bind(PORT);
     if (err != oct::net::Socket::ErroCode::NO_ERROR)
     {
         std::cout << "[SERVER-error]: socket bind failed. (" << errno << ") " << strerror( errno ) << "\n";
@@ -43,7 +43,7 @@ int main(int argc, char* argv[])          /* input arguments are not used */
     {
         std::cout << "[SERVER]: Socket successfully binded \n";
     }
-  				
+	
     /* Listen */
     err = server.listen(BACKLOG);
     if (err != oct::net::Socket::ErroCode::NO_ERROR)
@@ -55,26 +55,14 @@ int main(int argc, char* argv[])          /* input arguments are not used */
     {
         std::cout << "[SERVER]: Listening on SERV_PORT. " << ntohs(server.get_address().sin_port) << "\n";
     }
-    
-	/*err = server.connect(SERVER_ADDRESS,PORT);
-	if (err != oct::net::Socket::ErroCode::NO_ERROR)
-	{
-		std::cout << "[SERVER-error]: socket connect failed. (" << errno << ") " << strerror( errno ) << "\n";
-		return -1;
-	} 
-	else
-	{
-		std::cout << "[SERVER]: Socket successfully connect\n";
-	}*/
-	//server.write(buff_tx);
-    //std::cout << "CLIENT:Received: " << server.read(100) << "\n"; 
-	//server.write("bye..");
 	
+	//server.write("[SERVER]: open.");
+    	
     /* Accept the data from incoming sockets in a iterative way */
 	std::shared_ptr<oct::net::Socket> new_socket;
-   	while(1)
+   	while(true)
    	{
-        new_socket = server.accept(); 
+        new_socket = server.accept(); 	
         buff_rx = new_socket->read(BUF_SIZE);  
 		std::cout << "[CLIENT] : " << buff_rx << "\n";
     }
