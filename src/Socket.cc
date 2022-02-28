@@ -54,7 +54,7 @@ Socket::ErroCode Socket::connect(const char* a,unsigned int p)
     address.sin_addr.s_addr = inet_addr(a); 
     address.sin_port = htons(p);
     
-    if(::connect(file, (struct sockaddr*)&address, sizeof(address)) == -1) return FAIL_ON_CONNECT_SOCKET;
+    if(file == -1) if(::connect(file, (struct sockaddr*)&address, sizeof(address)) == -1) return FAIL_ON_CONNECT_SOCKET;
     
     return NO_ERROR;
 }
@@ -64,7 +64,7 @@ Socket::ErroCode Socket::bind(const char* a,unsigned int p)
     address.sin_addr.s_addr = inet_addr(a); 
     address.sin_port = htons(p);
     
-    if(::bind(file, (struct sockaddr*)&address, sizeof(address)) == -1) return FAIL_ON_CONNECT_SOCKET;
+    if(file == -1) if(::bind(file, (struct sockaddr*)&address, sizeof(address)) == -1) return FAIL_ON_CONNECT_SOCKET;
     
     return NO_ERROR;
 }
