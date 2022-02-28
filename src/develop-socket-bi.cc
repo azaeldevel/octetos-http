@@ -43,7 +43,7 @@ int main(int argc, char* argv[])          /* input arguments are not used */
     {
         std::cout << "[SERVER]: Socket successfully binded \n";
     }
-  
+  				
     /* Listen */
     err = server.listen(BACKLOG);
     if (err != oct::net::Socket::ErroCode::NO_ERROR)
@@ -55,56 +55,27 @@ int main(int argc, char* argv[])          /* input arguments are not used */
     {
         std::cout << "[SERVER]: Listening on SERV_PORT. " << ntohs(server.get_address().sin_port) << "\n";
     }
-      
-      /* Accept the data from incoming sockets in a iterative way */
+    
+	/*err = server.connect(SERVER_ADDRESS,PORT);
+	if (err != oct::net::Socket::ErroCode::NO_ERROR)
+	{
+		std::cout << "[SERVER-error]: socket connect failed. (" << errno << ") " << strerror( errno ) << "\n";
+		return -1;
+	} 
+	else
+	{
+		std::cout << "[SERVER]: Socket successfully connect\n";
+	}*/
+	//server.write(buff_tx);
+    //std::cout << "CLIENT:Received: " << server.read(100) << "\n"; 
+	//server.write("bye..");
+	
+    /* Accept the data from incoming sockets in a iterative way */
 	std::shared_ptr<oct::net::Socket> new_socket;
    	while(1)
    	{
         new_socket = server.accept(); 
-        if (new_socket->get_file() < 0) 
-        { 
-            fprintf(stderr, "[SERVER-error]: connection not accepted. %d: %s \n", errno, strerror( errno ));
-            return -1;
-        } 
-        else
-        {              
-            while(1) /* read data from a client socket till it is closed */ 
-            {  
-                /* read client message, copy it into buffer */
-                buff_rx = new_socket->read(BUF_SIZE);  
-                
-                if(not buff_rx)
-                {
-                    fprintf(stderr, "[SERVER-error]: connfd cannot be read. %d: %s \n", errno, strerror( errno ));
-                }
-                else if(strlen(buff_rx) == 0) /* if length is 0 client socket closed, then exit */
-                {
-                    printf("[SERVER]: client socket closed \n\n");
-                    
-                    break; 
-                }
-                else
-                {
-                    new_socket->write(buff_tx, strlen(buff_tx));
-                    printf("[SERVER]: %s \n", buff_rx);
-                } 
-                
-				err = server.connect(SERVER_ADDRESS,PORT);
-				if (err != oct::net::Socket::ErroCode::NO_ERROR)
-				{
-					std::cout << "[SERVER-error]: socket connect failed. (" << errno << ") " << strerror( errno ) << "\n";
-					return -1;
-				} 
-				else
-				{
-					std::cout << "[SERVER]: Socket successfully connect\n";
-				}
-				server.write((const char*)buff_tx);
-    			std::cout << "CLIENT:Received: " << server.read(100) << "\n"; 
-				server.write("bye..");
-				//server.close();
-				//break;
-            }  
-        }                      
-    }    
+        buff_rx = new_socket->read(BUF_SIZE);  
+		std::cout << "[CLIENT] : " << buff_rx << "\n";
+    }
 } 

@@ -32,8 +32,6 @@ int main(int argc, char* argv[])          /* input arguments are not used */
         std::cout << "[SERVER]: Socket successfully created..\n";
     }
     
-    
-    
     /* Bind socket */
     err = server.bind(SERVER_ADDRESS,PORT);
     if (err != oct::net::Socket::ErroCode::NO_ERROR)
