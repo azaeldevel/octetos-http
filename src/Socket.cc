@@ -121,23 +121,8 @@ std::shared_ptr<Socket> Socket::accept()
 
 
 
-SocketBi::SocketBi() : address({0})
-{
-}
 
-SocketBi::~SocketBi()
-{
-}
-Socket::ErroCode SocketBi::connect(const char* a,unsigned int p)
-{	
-	address.sin_family = AF_INET;
-    address.sin_addr.s_addr = inet_addr(a); 
-    address.sin_port = htons(p);
-    
-    if(::connect(file, (sockaddr*)&address, sizeof(address)) == -1) return Socket::ErroCode::FAIL_ON_CONNECT_SOCKET;
-    
-    return NO_ERROR;
-}
+
 
 
 

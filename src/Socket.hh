@@ -66,19 +66,6 @@ private:
 	unsigned int address_len;
 };
 
-class SocketBi : public Socket
-{
-public:
-	SocketBi();
-	~SocketBi();
-
-	ErroCode connect(const char* to_address,unsigned int port);
-
-private:
-	struct sockaddr_in address;
-
-};
-
 }
 
 #endif
